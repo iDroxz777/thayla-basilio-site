@@ -1,0 +1,155 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-ivory: #f3efe9;
+  --color-sand: #e8e1d7;
+  /* tons de texto calibrados para contraste AA sobre o marfim */
+  --color-stone: #6f665e;
+  --color-taupe: #5f5851;
+  --color-ink: #1c1a18;
+  --color-night: #141312;
+  --color-champagne: #c2a27a;
+  --color-champagne-soft: #d8c3a0;
+  /* dourado para texto sobre fundo claro (o champagne puro não chega a 3:1) */
+  --color-champagne-deep: #9a7850;
+
+  --font-serif: 'Cormorant Garamond', 'Times New Roman', serif;
+  --font-sans: 'Jost', system-ui, sans-serif;
+
+  --ease-silk: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Layout horizontal com pin só existe quando há movimento permitido e tela larga */
+@custom-variant pinned (@media (min-width: 1024px) and (prefers-reduced-motion: no-preference));
+
+@layer base {
+  html {
+    scroll-behavior: auto;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-ivory);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    /* Cormorant usa algarismos antigos por padrão; numeração fica melhor alinhada */
+    font-variant-numeric: lining-nums;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: var(--color-champagne-soft);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--color-champagne);
+    outline-offset: 4px;
+  }
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 400;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+
+@utility arch {
+  border-radius: 999px 999px 0 0;
+}
+
+/* Monograma: PNG vira máscara, a cor vem do currentColor */
+@utility mono-mask {
+  background-color: currentColor;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  mask-position: center;
+}
+
+/* Granulação de papel por cima de tudo — quebra o "digital demais" */
+.grain {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  opacity: 0.05;
+  /* camada própria na GPU: não repinta a página inteira a cada scroll */
+  transform: translateZ(0);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Perguntas frequentes: abre com altura animada onde o navegador suporta (fallback: abre direto) */
+@supports (interpolate-size: allow-keywords) {
+  .faq {
+    interpolate-size: allow-keywords;
+  }
+  .faq::details-content {
+    height: 0;
+    overflow: clip;
+    transition:
+      height 0.5s var(--ease-silk),
+      content-visibility 0.5s allow-discrete;
+  }
+  .faq[open]::details-content {
+    height: auto;
+  }
+}
+
+/* Link com sublinhado que corre */
+.link-line {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 100% 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.6s var(--ease-silk);
+}
+.link-line:hover,
+.link-line:focus-visible {
+  background-size: 100% 1px;
+  background-position: 0% 100%;
+}
+
+/* Anel que "respira" em volta dos pontos de aplicação */
+@keyframes face-pulse {
+  0%,
+  100% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.9;
+  }
+  99% {
+    transform: scale(1.4);
+  }
+}
+.face-pulse {
+  animation: face-pulse 2.4s var(--ease-silk) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
