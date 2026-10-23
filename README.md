@@ -14,6 +14,19 @@ Site de uma cirurgiã-dentista especializada em harmonização orofacial em Laje
 - **Animações com cuidado**: GSAP (ScrollTrigger e SplitText), Lenis e Motion, com respeito ao `prefers-reduced-motion`.
 - **Performance**: imagens em WebP e as bibliotecas separadas em chunks próprios, pra continuarem em cache entre um deploy e outro.
 
+## Números
+
+Medido com o Lighthouse 12 em 23/10/2026, no site publicado:
+
+| | Desempenho | Acessibilidade | Boas práticas | SEO |
+|---|---|---|---|---|
+| Desktop | 96 | 93 | 100 | 100 |
+| Celular | 82 | 93 | 100 | 100 |
+
+## Quem fez
+
+Projeto da Averon. Toda a programação foi feita por mim: estrutura, componentes, animações, SEO e deploy.
+
 ## Stack
 
 React 19 · Vite · Tailwind CSS v4 · GSAP · Lenis · Motion · Firebase Hosting
